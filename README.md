@@ -1,4 +1,4 @@
-RESTful API для MyBank. В сервисе есть пользователи (id, name, balance). Можно:
+RESTful API для MyBank. В сервисе есть пользователи (id, balance). Можно:
 Просмотреть баланс
 ````
 Request:
