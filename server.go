@@ -59,7 +59,7 @@ func balanceHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Fprintln(w, "200 OK")
+	fmt.Fprintln(w, http.StatusOK, "OK")
 	fmt.Fprintf(w, "%s\n", string(uJson))
 }
 
@@ -85,7 +85,7 @@ func depositHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, t.User, t.Amount)
 	//Работа с базой данных
 
-	fmt.Fprintln(w, "200 OK")
+	fmt.Fprintln(w, http.StatusOK, "OK")
 }
 
 func withdrawHandler(w http.ResponseWriter, r *http.Request) {
@@ -109,7 +109,7 @@ func withdrawHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, t.User, t.Amount)
 	//Работа с базой данных
 
-	fmt.Fprintln(w, "200 OK")
+	fmt.Fprintln(w, http.StatusOK, "OK")
 }
 
 func transferHandler(w http.ResponseWriter, r *http.Request) {
@@ -135,5 +135,5 @@ func transferHandler(w http.ResponseWriter, r *http.Request) {
 
 	//Вывод
 
-	fmt.Fprintln(w, "200 OK")
+	fmt.Fprintln(w, http.StatusOK, "OK")
 }
