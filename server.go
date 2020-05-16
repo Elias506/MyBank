@@ -1,6 +1,7 @@
 package main
 
 import (
+	"database/sql"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -22,15 +23,22 @@ type transfer struct {
 }
 
 func main() {
+	connStr := "user=postgres password=mypass dbname=productdb sslmode=disable"
+	db, err := sql.Open("postgres", connStr)
+	if err != nil {
+		log.Fatal("DataBased error: ", err)
+	}
+	defer db.Close()
+
 	http.HandleFunc("/balance",  balanceHandler)
 	http.HandleFunc("/deposit",  depositHandler)
 	http.HandleFunc("/withdraw", withdrawHandler)
 	http.HandleFunc("/transfer", transferHandler)
 
 	fmt.Println("Server is listening...")
-	err := http.ListenAndServe(":9090", nil)
+	err = http.ListenAndServe(":9090", nil)
 	if err != nil {
-		log.Fatal("ListenAndServe Error: ", err)
+		log.Fatal("ListenAndServe error: ", err)
 	}
 
 }
@@ -39,7 +47,7 @@ func balanceHandler(w http.ResponseWriter, r *http.Request) {
 	idStr := r.URL.Query().Get("user")
 	id, err := strconv.Atoi(idStr)
 	if err != nil {
-		fmt.Fprintf(w, "Error: %v", err.Error())
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 	fmt.Fprintf(w, "User Id is %d\n", id)
@@ -55,7 +63,7 @@ func balanceHandler(w http.ResponseWriter, r *http.Request) {
 	u := &user{Balance: balance}
 	uJson, err := json.Marshal(u)
 	if err != nil {
-		fmt.Fprintf(w, "Error: %v", err.Error())
+		http.Error(w, err.Error(), http.StatusUnprocessableEntity)
 		return
 	}
 
@@ -68,17 +76,17 @@ func depositHandler(w http.ResponseWriter, r *http.Request) {
 	body, err := ioutil.ReadAll(r.Body)
 	defer r.Body.Close()
 	if err != nil {
-		fmt.Fprintf(w, "Error: %v", err.Error())
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 	t := &transfer{}
 	err = json.Unmarshal(body, t)
 	if err != nil {
-		fmt.Fprintf(w, "Error: %v", err.Error())
+		http.Error(w, err.Error(), http.StatusUnprocessableEntity)
 		return
 	}
-	if t.User == 0 || t.Amount == 0 {
-		fmt.Fprintln(w, "Parameters is wrong")
+	if t.User == 0 {
+		http.Error(w, "Wrong User Id", http.StatusUnprocessableEntity)
 		return
 	}
 
@@ -91,7 +99,7 @@ func depositHandler(w http.ResponseWriter, r *http.Request) {
 func withdrawHandler(w http.ResponseWriter, r *http.Request) {
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		fmt.Fprintf(w, "Error: %v", err.Error())
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 	defer r.Body.Close()
@@ -101,8 +109,8 @@ func withdrawHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "Error: %v", err.Error())
 		return
 	}
-	if t.User == 0 || t.Amount == 0 {
-		fmt.Fprintln(w, "Parameters is wrong")
+	if t.User == 0 {
+		http.Error(w, "Wrong User Id", http.StatusUnprocessableEntity)
 		return
 	}
 
@@ -116,18 +124,18 @@ func transferHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, "transferHandler")
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		fmt.Fprintf(w, "Error: %v", err.Error())
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 	defer r.Body.Close()
 	t := &transfer{}
 	err = json.Unmarshal(body, t)
 	if err != nil {
-		fmt.Fprintf(w, "Error: %v", err.Error())
+		http.Error(w, "Wrong User Id", http.StatusUnprocessableEntity)
 		return
 	}
-	if t.From == 0 || t.To == 0 || t.Amount == 0 {
-		fmt.Fprintln(w, "Parameters is wrong")
+	if t.From == 0 || t.To == 0 {
+		http.Error(w, "Wrong User Id", http.StatusUnprocessableEntity)
 		return
 	}
 
