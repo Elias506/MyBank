@@ -11,7 +11,6 @@ import (
 
 type user struct {
 	ID 		int	     `json:"id,int,omitempty"`
-	//Name    string
 	Balance int		 `json:"balance,int"`
 }
 
