@@ -1,7 +1,7 @@
 package main
 
 import (
-	"database/sql"
+	_ "database/sql"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -23,8 +23,8 @@ type transfer struct {
 }
 
 func main() {
-	connStr := "user=postgres password=mypass dbname=productdb sslmode=disable"
-	db, err := sql.Open("postgres", connStr)
+	//connStr := "user=postgres password=mypass dbname=productdb sslmode=disable"
+	//db, err := sql.Open("postgres", connStr)
 	if err != nil {
 		log.Fatal("DataBased error: ", err)
 	}
