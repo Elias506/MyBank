@@ -11,8 +11,8 @@ import (
 )
 
 type user struct {
-	ID 	int	     `json:"id,int,omitempty"`
-	Balance int		 `json:"balance,int"`
+	ID 	int `json:"id,int,omitempty"`
+	Balance int `json:"balance,int"`
 }
 
 type transfer struct {
@@ -23,12 +23,12 @@ type transfer struct {
 }
 
 func main() {
-	//connStr := "user=postgres password=mypass dbname=productdb sslmode=disable"
-	//db, err := sql.Open("postgres", connStr)
+	/*connStr := "user=postgres password=mypass dbname=productdb sslmode=disable"
+	db, err := sql.Open("postgres", connStr)
 	if err != nil {
 		log.Fatal("DataBased error: ", err)
 	}
-	defer db.Close()
+	defer db.Close()*/
 
 	http.HandleFunc("/balance",  balanceHandler)
 	http.HandleFunc("/deposit",  depositHandler)
