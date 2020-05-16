@@ -10,7 +10,7 @@ import (
 )
 
 type user struct {
-	ID 		int	     `json:"id,int,omitempty"`
+	ID 	int	     `json:"id,int,omitempty"`
 	Balance int		 `json:"balance,int"`
 }
 
