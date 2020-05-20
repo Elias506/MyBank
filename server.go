@@ -11,8 +11,8 @@ import (
 )
 
 type user struct {
-	ID 		int	     `json:"id,int,omitempty"`
-	Balance int		 `json:"balance,int"`
+	ID      int `json:"id,int,omitempty"`
+	Balance int `json:"balance,int"`
 }
 
 type transfer struct {
@@ -38,7 +38,7 @@ func main() {
 	http.HandleFunc("/deposit",  depositHandler)
 	http.HandleFunc("/withdraw", withdrawHandler)
 	http.HandleFunc("/transfer", transferHandler)
-	
+
 	fmt.Println("Server is listening...")
 	err := http.ListenAndServe(":9090", nil)
 	if err != nil {
@@ -62,14 +62,14 @@ func balanceHandler(w http.ResponseWriter, r *http.Request) {
 	//Инициализируем баланс
 	balance := 21
 	//Подготовка к выводу
-	
+
 	u := &user{Balance: balance}
 	uJson, err := json.Marshal(u)
 	if err != nil {
 		handleError(w, r.URL.String(), err, http.StatusInternalServerError)
 		return
 	}
-	
+
 	fmt.Fprintln(w, http.StatusOK, "OK")
 	fmt.Fprintf(w, "%s\n", string(uJson))
 }
