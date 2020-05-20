@@ -1,7 +1,6 @@
 package main
 
 import (
-	_ "database/sql"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -28,18 +27,13 @@ func handleError(w http.ResponseWriter, url string, err error, status int){
 }
 
 func main() {
-	/*connStr := "user=postgres password=mypass dbname=productdb sslmode=disable"
-	db, err := sql.Open("postgres", connStr)
-	if err != nil {
-		log.Fatal("DataBased error: ", err)
-	}
-	defer db.Close()*/
 	http.HandleFunc("/balance",  balanceHandler)
 	http.HandleFunc("/deposit",  depositHandler)
 	http.HandleFunc("/withdraw", withdrawHandler)
 	http.HandleFunc("/transfer", transferHandler)
 
 	fmt.Println("Server is listening...")
+
 	err := http.ListenAndServe(":9090", nil)
 	if err != nil {
 		log.Fatal("ListenAndServe error: ", err)
