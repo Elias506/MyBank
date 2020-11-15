@@ -58,14 +58,14 @@ func balanceHandler(w http.ResponseWriter, r *http.Request) {
 	//Подготовка к выводу
 
 	u := &user{Balance: balance}
-	uJson, err := json.Marshal(u)
+	uJSON, err := json.Marshal(u)
 	if err != nil {
 		handleError(w, r.URL.String(), err, http.StatusInternalServerError)
 		return
 	}
 
 	fmt.Fprintln(w, http.StatusOK, "OK")
-	fmt.Fprintf(w, "%s\n", string(uJson))
+	fmt.Fprintf(w, "%s\n", string(uJSON))
 }
 
 func depositHandler(w http.ResponseWriter, r *http.Request) {
